@@ -1,0 +1,13 @@
+# ไฟล์ที่ได้จากการ compile
+*.class
+bin/
+out/
+*.jar
+
+# ไฟล์ตั้งค่าของ IDE
+.vscode/
+.idea/
+
+# ไฟล์ของระบบ
+Thumbs.db
+.DS_Store
