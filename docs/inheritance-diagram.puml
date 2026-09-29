@@ -1,0 +1,38 @@
+@startuml inheritance-diagram
+' แผนภาพการสืบทอดคลาส (แบบง่าย) — แสดงเฉพาะชื่อคลาส
+!pragma layout smetana
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFDF5
+skinparam classBorderColor #5A4A3A
+skinparam ArrowColor #5A4A3A
+hide members
+hide circle
+
+abstract class GameObject
+class Player
+abstract class Item
+class NumberItem
+class OperatorItem
+abstract class Door
+interface Interactable
+class PuzzleDoor
+class ExitDoor
+abstract class Obstacle
+class Spike
+class Guard
+
+GameObject <|-- Player
+GameObject <|-- Item
+GameObject <|-- Door
+GameObject <|-- Obstacle
+Item <|-- NumberItem
+Item <|-- OperatorItem
+Interactable <|.. Door
+Door <|-- PuzzleDoor
+Door <|-- ExitDoor
+Obstacle <|-- Spike
+Obstacle <|-- Guard
+@enduml

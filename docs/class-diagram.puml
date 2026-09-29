@@ -1,0 +1,231 @@
+@startuml class-diagram
+' ============================================================
+'  Class Diagram — เกมเขาวงกตตัวเลข (Number Maze)
+'  แก้ไขไฟล์นี้แล้ว render ใหม่ได้ด้วย PlantUML
+'  สัญลักษณ์:  + public   - private   # protected   {abstract}  {static}
+' ============================================================
+!pragma layout smetana
+skinparam dpi 150
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFDF5
+skinparam classBorderColor #5A4A3A
+skinparam ArrowColor #5A4A3A
+skinparam packageStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+hide empty members
+
+package "Swing (Java)" #EEEEEE {
+  class JPanel
+  class JDialog
+}
+
+' ---------- วัตถุในเกม ----------
+abstract class GameObject {
+  # x : int
+  # y : int
+  + GameObject(x : int, y : int)
+  + getX() : int
+  + getY() : int
+  + {abstract} draw(g : Graphics, tileSize : int) : void
+}
+
+class Player {
+  - inventory : Inventory
+  + Player(x : int, y : int)
+  + moveTo(newX : int, newY : int) : void
+  + getInventory() : Inventory
+  + draw(g : Graphics, tile : int) : void
+}
+
+abstract class Item {
+  + Item(x : int, y : int)
+  + {abstract} getSymbol() : String
+  + {abstract} getColor() : Color
+  + draw(g : Graphics, tile : int) : void
+  + drawAt(g : Graphics, px : int, py : int, size : int) : void
+}
+
+class NumberItem {
+  - value : int
+  + NumberItem(x : int, y : int, value : int)
+  + getValue() : int
+  + getSymbol() : String
+  + getColor() : Color
+}
+
+class OperatorItem {
+  - operator : char
+  + OperatorItem(x : int, y : int, operator : char)
+  + getOperator() : char
+  + getSymbol() : String
+  + getColor() : Color
+}
+
+interface Interactable <<interface>> {
+  + interact(player : Player, game : GamePanel) : void
+}
+
+abstract class Door {
+  - locked : boolean
+  + Door(x : int, y : int)
+  + isLocked() : boolean
+  # unlock() : void
+}
+
+class PuzzleDoor {
+  - target : int
+  + PuzzleDoor(x : int, y : int, target : int)
+  + getTarget() : int
+  + interact(player : Player, game : GamePanel) : void
+  + draw(g : Graphics, tile : int) : void
+}
+
+class ExitDoor {
+  + ExitDoor(x : int, y : int)
+  + interact(player : Player, game : GamePanel) : void
+  + draw(g : Graphics, tile : int) : void
+}
+
+abstract class Obstacle {
+  + Obstacle(x : int, y : int)
+  + {abstract} update(level : Level) : void
+  + {abstract} isDangerous() : boolean
+  + {abstract} getHitMessage() : String
+}
+
+class Spike {
+  - tick : int
+  + Spike(x : int, y : int)
+  + update(level : Level) : void
+  + isDangerous() : boolean
+  + getHitMessage() : String
+  + draw(g : Graphics, tile : int) : void
+}
+
+class Guard {
+  - direction : int
+  - tick : int
+  + Guard(x : int, y : int)
+  + update(level : Level) : void
+  + isDangerous() : boolean
+  + getHitMessage() : String
+  + draw(g : Graphics, tile : int) : void
+}
+
+' ---------- ระบบเกม ----------
+class Inventory {
+  - items : List<Item>
+  + add(item : Item) : void
+  + remove(item : Item) : void
+  + getItems() : List<Item>
+  + size() : int
+}
+
+class Level {
+  - name : String
+  - grid : char[][]
+  - items : List<Item>
+  - doors : List<Door>
+  - obstacles : List<Obstacle>
+  - startX : int
+  - startY : int
+  + Level(name : String, map : String[], doorTargets : Map<Character, Integer>)
+  + isWall(x : int, y : int) : boolean
+  + isBlockedForGuard(x : int, y : int) : boolean
+  + takeItemAt(x : int, y : int) : Item
+  + findDoorAt(x : int, y : int) : Door
+  + getItems() : List<Item>
+  + getDoors() : List<Door>
+  + getObstacles() : List<Obstacle>
+}
+
+class Levels {
+  + {static} count() : int
+  + {static} create(index : int) : Level
+}
+
+class GamePanel {
+  - levelIndex : int
+  - level : Level
+  - player : Player
+  - message : String
+  - gameWon : boolean
+  - timer : Timer
+  + GamePanel()
+  - loadLevel(index : int) : void
+  - tick() : void
+  - checkObstacles() : void
+  - tryMove(dx : int, dy : int) : void
+  + completeLevel() : void
+  # paintComponent(g : Graphics) : void
+}
+
+class PuzzleDialog {
+  - target : int
+  - inventory : Inventory
+  - equation : List<Item>
+  - solved : boolean
+  + PuzzleDialog(owner : Window, target : int, inventory : Inventory)
+  + isSolved() : boolean
+  - refresh() : void
+  - submit() : void
+}
+
+class ExpressionEvaluator {
+  + {static} validate(tokens : List<Item>) : void
+  + {static} evaluate(tokens : List<Item>) : double
+  + {static} format(value : double) : String
+}
+
+class Sprites {
+  + {static} PLAYER : BufferedImage
+  + {static} PUZZLE_DOOR : BufferedImage
+  + {static} EXIT_DOOR : BufferedImage
+  + {static} GUARD : BufferedImage
+  + {static} WALL : BufferedImage
+  + {static} FLOOR : BufferedImage
+  + {static} drawFit(g : Graphics, img : Image, x : int, y : int, w : int, h : int) : void
+}
+
+class Main {
+  + {static} main(args : String[]) : void
+  - {static} useThaiFont() : void
+}
+
+' ---------- Inheritance (สืบทอด) ----------
+GameObject <|-- Player
+GameObject <|-- Item
+GameObject <|-- Door
+GameObject <|-- Obstacle
+Item <|-- NumberItem
+Item <|-- OperatorItem
+Door <|-- PuzzleDoor
+Door <|-- ExitDoor
+Obstacle <|-- Spike
+Obstacle <|-- Guard
+JPanel <|-- GamePanel
+JDialog <|-- PuzzleDialog
+
+' ---------- Realization (implements interface) ----------
+Interactable <|.. Door
+
+' ---------- Composition / Aggregation ----------
+Player *-- "1" Inventory
+Inventory o-- "0..*" Item
+Level *-- "0..*" Item
+Level *-- "0..*" Door
+Level *-- "0..*" Obstacle
+GamePanel *-- "1" Level
+GamePanel *-- "1" Player
+
+' ---------- Dependency (ใช้งาน / สร้าง) ----------
+Main ..> GamePanel : creates
+GamePanel ..> Levels : uses
+Levels ..> Level : creates
+PuzzleDoor ..> PuzzleDialog : opens
+PuzzleDialog ..> ExpressionEvaluator : uses
+@enduml

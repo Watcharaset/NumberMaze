@@ -54,6 +54,8 @@ java Main
 
 ## โครงสร้างคลาส
 
+Class Diagram แบบเต็ม: [docs/class-diagram.png](docs/class-diagram.png) (ต้นฉบับ PlantUML: [docs/class-diagram.puml](docs/class-diagram.puml))
+
 ```
 GameObject (abstract)
 ├── Player                  มี Inventory (Composition)
