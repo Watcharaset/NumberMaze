@@ -1,0 +1,71 @@
+@startuml class-detail-items
+' Class Diagram รายละเอียด กลุ่มที่ 1: GameObject, Player, Inventory, Item
+!pragma layout smetana
+skinparam dpi 150
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFDF5
+skinparam classBorderColor #5A4A3A
+skinparam ArrowColor #5A4A3A
+skinparam nodesep 30
+skinparam ranksep 50
+
+abstract class GameObject {
+  # x : int
+  # y : int
+  + GameObject(x : int, y : int)
+  + getX() : int
+  + getY() : int
+  + {abstract} draw(g : Graphics, tileSize : int) : void
+}
+
+class Player {
+  - inventory : Inventory
+  + Player(x : int, y : int)
+  + moveTo(newX : int, newY : int) : void
+  + getInventory() : Inventory
+  + draw(g : Graphics, tile : int) : void
+}
+
+class Inventory {
+  - items : List<Item>
+  + add(item : Item) : void
+  + remove(item : Item) : void
+  + getItems() : List<Item>
+  + size() : int
+}
+
+abstract class Item {
+  + Item(x : int, y : int)
+  + {abstract} getSymbol() : String
+  + {abstract} getColor() : Color
+  + draw(g : Graphics, tile : int) : void
+  + drawAt(g : Graphics, px : int, py : int, size : int) : void
+}
+
+class NumberItem {
+  - value : int
+  + NumberItem(x : int, y : int, value : int)
+  + getValue() : int
+  + getSymbol() : String
+  + getColor() : Color
+}
+
+class OperatorItem {
+  - operator : char
+  + OperatorItem(x : int, y : int, operator : char)
+  + getOperator() : char
+  + getSymbol() : String
+  + getColor() : Color
+}
+
+GameObject <|-- Player
+GameObject <|-- Item
+Item <|-- NumberItem
+Item <|-- OperatorItem
+Player *-- "1" Inventory
+Inventory o-- "0..*" Item
+@enduml

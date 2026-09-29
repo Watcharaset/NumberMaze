@@ -1,0 +1,77 @@
+@startuml class-detail-doors
+' Class Diagram รายละเอียด กลุ่มที่ 2: ประตู และอุปสรรค
+!pragma layout smetana
+skinparam dpi 150
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFDF5
+skinparam classBorderColor #5A4A3A
+skinparam ArrowColor #5A4A3A
+skinparam nodesep 30
+skinparam ranksep 50
+
+abstract class GameObject
+hide GameObject members
+
+interface Interactable <<interface>> {
+  + interact(player : Player, game : GamePanel) : void
+}
+
+abstract class Door {
+  - locked : boolean
+  + Door(x : int, y : int)
+  + isLocked() : boolean
+  # unlock() : void
+}
+
+class PuzzleDoor {
+  - target : int
+  + PuzzleDoor(x : int, y : int, target : int)
+  + getTarget() : int
+  + interact(player : Player, game : GamePanel) : void
+  + draw(g : Graphics, tile : int) : void
+}
+
+class ExitDoor {
+  + ExitDoor(x : int, y : int)
+  + interact(player : Player, game : GamePanel) : void
+  + draw(g : Graphics, tile : int) : void
+}
+
+abstract class Obstacle {
+  + Obstacle(x : int, y : int)
+  + {abstract} update(level : Level) : void
+  + {abstract} isDangerous() : boolean
+  + {abstract} getHitMessage() : String
+}
+
+class Spike {
+  - tick : int
+  + Spike(x : int, y : int)
+  + update(level : Level) : void
+  + isDangerous() : boolean
+  + getHitMessage() : String
+  + draw(g : Graphics, tile : int) : void
+}
+
+class Guard {
+  - direction : int
+  - tick : int
+  + Guard(x : int, y : int)
+  + update(level : Level) : void
+  + isDangerous() : boolean
+  + getHitMessage() : String
+  + draw(g : Graphics, tile : int) : void
+}
+
+GameObject <|-- Door
+GameObject <|-- Obstacle
+Interactable <|.. Door
+Door <|-- PuzzleDoor
+Door <|-- ExitDoor
+Obstacle <|-- Spike
+Obstacle <|-- Guard
+@enduml

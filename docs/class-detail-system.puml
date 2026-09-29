@@ -1,0 +1,99 @@
+@startuml class-detail-system
+' Class Diagram รายละเอียด กลุ่มที่ 3: ระบบเกม และเครื่องมือ
+!pragma layout smetana
+skinparam dpi 150
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFDF5
+skinparam classBorderColor #5A4A3A
+skinparam ArrowColor #5A4A3A
+skinparam nodesep 30
+skinparam ranksep 50
+
+class JPanel #EEEEEE
+class JDialog #EEEEEE
+hide JPanel members
+hide JDialog members
+
+class GamePanel {
+  - levelIndex : int
+  - level : Level
+  - player : Player
+  - message : String
+  - gameWon : boolean
+  - timer : Timer
+  + GamePanel()
+  - loadLevel(index : int) : void
+  - tick() : void
+  - checkObstacles() : void
+  - tryMove(dx : int, dy : int) : void
+  + completeLevel() : void
+  # paintComponent(g : Graphics) : void
+}
+
+class Level {
+  - name : String
+  - grid : char[][]
+  - items : List<Item>
+  - doors : List<Door>
+  - obstacles : List<Obstacle>
+  - startX : int
+  - startY : int
+  + Level(name : String, map : String[], doorTargets : Map)
+  + isWall(x : int, y : int) : boolean
+  + isBlockedForGuard(x : int, y : int) : boolean
+  + takeItemAt(x : int, y : int) : Item
+  + findDoorAt(x : int, y : int) : Door
+  + getItems() : List<Item>
+  + getDoors() : List<Door>
+  + getObstacles() : List<Obstacle>
+}
+
+class Levels {
+  + {static} count() : int
+  + {static} create(index : int) : Level
+}
+
+class PuzzleDialog {
+  - target : int
+  - inventory : Inventory
+  - equation : List<Item>
+  - solved : boolean
+  + PuzzleDialog(owner : Window, target : int, inventory : Inventory)
+  + isSolved() : boolean
+  - refresh() : void
+  - submit() : void
+}
+
+class ExpressionEvaluator {
+  + {static} validate(tokens : List<Item>) : void
+  + {static} evaluate(tokens : List<Item>) : double
+  + {static} format(value : double) : String
+}
+
+class Sprites {
+  + {static} PLAYER : BufferedImage
+  + {static} PUZZLE_DOOR : BufferedImage
+  + {static} EXIT_DOOR : BufferedImage
+  + {static} GUARD : BufferedImage
+  + {static} WALL : BufferedImage
+  + {static} FLOOR : BufferedImage
+  + {static} drawFit(g, img, x, y, w, h) : void
+}
+
+class Main {
+  + {static} main(args : String[]) : void
+  - {static} useThaiFont() : void
+}
+
+JPanel <|-- GamePanel
+JDialog <|-- PuzzleDialog
+Main ..> GamePanel : creates
+GamePanel *-- "1" Level
+GamePanel ..> Levels : uses
+Levels ..> Level : creates
+PuzzleDialog ..> ExpressionEvaluator : uses
+@enduml

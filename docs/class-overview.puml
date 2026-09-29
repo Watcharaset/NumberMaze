@@ -1,0 +1,66 @@
+@startuml class-overview
+' Class Diagram ภาพรวม — แสดงชื่อคลาสและความสัมพันธ์ทั้งหมด (รายละเอียดอยู่ใน class-detail-*.puml)
+!pragma layout smetana
+skinparam dpi 150
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 13
+skinparam classFontStyle bold
+skinparam classBackgroundColor #FFFDF5
+skinparam classBorderColor #5A4A3A
+skinparam ArrowColor #5A4A3A
+skinparam nodesep 25
+skinparam ranksep 45
+hide members
+
+class JPanel #EEEEEE
+class JDialog #EEEEEE
+class Main
+class GamePanel
+class Levels
+class Level
+class PuzzleDialog
+class ExpressionEvaluator
+class Inventory
+abstract class GameObject
+class Player
+abstract class Item
+class NumberItem
+class OperatorItem
+interface Interactable
+abstract class Door
+class PuzzleDoor
+class ExitDoor
+abstract class Obstacle
+class Spike
+class Guard
+class Sprites
+
+JPanel <|-- GamePanel
+JDialog <|-- PuzzleDialog
+GameObject <|-- Player
+GameObject <|-- Item
+GameObject <|-- Door
+GameObject <|-- Obstacle
+Item <|-- NumberItem
+Item <|-- OperatorItem
+Interactable <|.. Door
+Door <|-- PuzzleDoor
+Door <|-- ExitDoor
+Obstacle <|-- Spike
+Obstacle <|-- Guard
+
+GamePanel *-- "1" Level
+GamePanel *-- "1" Player
+Level *-- "0..*" Item
+Level *-- "0..*" Door
+Level *-- "0..*" Obstacle
+Player *-- "1" Inventory
+Inventory o-- "0..*" Item
+
+Main ..> GamePanel : creates
+GamePanel ..> Levels : uses
+Levels ..> Level : creates
+PuzzleDoor ..> PuzzleDialog : opens
+PuzzleDialog ..> ExpressionEvaluator : uses
+@enduml
