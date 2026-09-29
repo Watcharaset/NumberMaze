@@ -35,14 +35,22 @@ Mini project วิชา Object-Oriented Programming — เกมเขาว�
 
 ## วิธีรัน
 
-ต้องมี Java JDK 17 ขึ้นไป
+ต้องมี Java 17 ขึ้นไป
+
+**แบบที่ 1 — เล่นทันที:** ดาวน์โหลด `NumberMaze.jar` จากหน้า [Releases](../../releases) แล้วดับเบิลคลิก หรือรันคำสั่ง
+
+```bash
+java -jar NumberMaze.jar
+```
+
+**แบบที่ 2 — รันจากโค้ด:** เปิดโฟลเดอร์นี้ใน VS Code แล้วกด Run ที่ `Main.java` หรือ
 
 ```bash
 javac -encoding UTF-8 *.java
 java Main
 ```
 
-หรือเปิดโฟลเดอร์นี้ใน VS Code แล้วกด Run ที่ `Main.java` (ต้องรันจากโฟลเดอร์โปรเจกต์ เพื่อให้หาโฟลเดอร์ `images/` เจอ)
+**สร้างไฟล์ jar เอง:** ดับเบิลคลิก `build.bat` (Windows) จะได้ไฟล์ `dist\NumberMaze.jar`
 
 ## โครงสร้างคลาส
 

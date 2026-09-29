@@ -11,3 +11,7 @@ out/
 # ไฟล์ของระบบ
 Thumbs.db
 .DS_Store
+
+# ไฟล์ที่ build.bat สร้าง
+build/
+dist/
